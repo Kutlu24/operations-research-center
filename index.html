@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimizasyon Merkezi - Yöneylem Araştırması</title>
+    <link rel="stylesheet" href="style.css">
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Optimizasyon Merkezi</h1>
+        <p>Karar Vermeyi Bilimselleştirin!</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#genel-bakis">Genel Bakış</a></li>
+            <li><a href="#teknikler">Teknikler</a></li>
+            <li><a href="#uygulama-alanlari">Uygulama Alanları</a></li>
+            <li><a href="#araclar">Araçlar</a></li>
+            <li><a href="#kaynaklar">Kaynaklar</a></li>
+            <li><a href="#topluluk">Topluluk</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="genel-bakis">
+            <h2>Genel Bakış</h2>
+            <p>Yöneylem araştırması (YA), karar verme süreçlerini iyileştirmek için matematiksel ve analitik yöntemlerin kullanıldığı bir disiplindir. İkinci Dünya Savaşı sırasında lojistik ve askeri planlama problemleri için geliştirilen yöntemler, günümüzde üretim planlama, ulaştırma, stok yönetimi, çizelgeleme ve kaynak tahsisi gibi pek çok alanda kullanılıyor.</p>
+            <p>Bu sayfa, YA'nın dört temel tekniğine (doğrusal programlama, tamsayılı programlama, kuyruk teorisi, benzetim) kısa, matematiksel olarak doğru bir giriş sunar.</p>
+        </section>
+
+        <section id="teknikler">
+            <h2>Teknikler</h2>
+
+            <div class="teknik-kategorileri">
+                <button data-kategori="dogrusal-programlama">Doğrusal Programlama</button>
+                <button data-kategori="tamsayili-programlama">Tamsayılı Programlama</button>
+                <button data-kategori="kuyruk-teorisi">Kuyruk Teorisi</button>
+                <button data-kategori="benzetim">Benzetim</button>
+            </div>
+
+            <div id="teknik-icerik">
+                <!-- Teknik İçeriği JavaScript ile Dinamik Olarak Yüklenecek -->
+            </div>
+        </section>
+
+        <section id="uygulama-alanlari">
+            <h2>Uygulama Alanları</h2>
+            <ul class="uygulama-listesi">
+                <li><strong>Üretim planlama:</strong> Sınırlı makine/işgücü kapasitesiyle üretim karmasını optimize etme.</li>
+                <li><strong>Ulaştırma ve lojistik:</strong> Depo-müşteri arası en düşük maliyetli sevkiyat planı (taşıma problemi).</li>
+                <li><strong>Stok yönetimi:</strong> Sipariş miktarı ve zamanlamasını, elde bulundurma ve sipariş maliyetlerini dengeleyerek belirleme.</li>
+                <li><strong>Personel çizelgeleme:</strong> Vardiya/talep kısıtları altında en az sayıda personelle hizmet düzeyini karşılama.</li>
+                <li><strong>Hizmet sistemleri:</strong> Çağrı merkezi, banka gişesi, acil servis gibi sistemlerde bekleme süresi ve kapasite planlaması.</li>
+            </ul>
+        </section>
+
+        <section id="araclar">
+            <h2>Araçlar</h2>
+            <ul class="arac-listesi">
+                <li><strong>Solver çözücüler:</strong> CPLEX, Gurobi, CBC — büyük ölçekli DP/TP problemleri için endüstri standardı çözücüler.</li>
+                <li><strong>Python:</strong> <code>PuLP</code> ve <code>Pyomo</code> kütüphaneleri ile modelleme; <code>SimPy</code> ile olay-güdümlü benzetim.</li>
+                <li><strong>R:</strong> <code>lpSolve</code> ve <code>ompr</code> paketleri ile doğrusal/tamsayılı programlama.</li>
+                <li><strong>Elektronik tablo:</strong> Excel Solver eklentisi — küçük ölçekli DP problemleri için hızlı bir başlangıç noktası.</li>
+            </ul>
+        </section>
+
+        <section id="kaynaklar">
+            <h2>Kaynaklar</h2>
+            <ul class="kaynak-listesi">
+                <li>
+                    <a href="https://neos-guide.org/" target="_blank" rel="noopener">NEOS Guide to Optimization</a>
+                    <span>Optimizasyon problemi türlerine ve çözüm yöntemlerine genel bakış.</span>
+                </li>
+                <li>
+                    <a href="https://www.informs.org/" target="_blank" rel="noopener">INFORMS</a>
+                    <span>Yöneylem araştırması ve yönetim bilimleri alanının uluslararası meslek kuruluşu.</span>
+                </li>
+                <li>
+                    <a href="https://coin-or.github.io/pulp/" target="_blank" rel="noopener">PuLP Dokümantasyonu</a>
+                    <span>Python ile doğrusal/tamsayılı programlama modelleme kütüphanesi.</span>
+                </li>
+            </ul>
+        </section>
+
+        <section id="topluluk">
+            <h2>Topluluk</h2>
+            <p>Bu site şu an bağımsız bir statik sayfa olduğu için kendi forum altyapısı yok. Sorularınız için <a href="https://or.stackexchange.com/" target="_blank" rel="noopener">Operations Research Stack Exchange</a> topluluğunu öneririz.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 Optimizasyon Merkezi</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
