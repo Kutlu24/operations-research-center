@@ -48,6 +48,7 @@ def get_config() -> ConfigInfo:
 
 class SolveRequest(BaseModel):
     question: str
+    lang: str = "tr"
 
 
 class SolveResponse(BaseModel):
@@ -60,11 +61,12 @@ class SolveResponse(BaseModel):
 
 @app.post("/solve", response_model=SolveResponse)
 def solve(req: SolveRequest) -> SolveResponse:
+    lang = req.lang if req.lang in ("tr", "en") else "tr"
     parsed = parse_problem(req.question)
 
     if parsed.problem_type == "lp" and parsed.lp is not None:
         solution = solve_lp(parsed.lp)
-        explanation = explain_lp(req.question, parsed.lp, solution)
+        explanation = explain_lp(req.question, parsed.lp, solution, lang=lang)
         return SolveResponse(
             problem_type="lp",
             explanation=explanation,
@@ -73,15 +75,19 @@ def solve(req: SolveRequest) -> SolveResponse:
 
     if parsed.problem_type == "queueing" and parsed.queueing is not None:
         result = solve_queueing(parsed.queueing)
-        explanation = explain_queueing(req.question, parsed.queueing, result)
+        explanation = explain_queueing(req.question, parsed.queueing, result, lang=lang)
         return SolveResponse(
             problem_type="queueing",
             explanation=explanation,
             queueing_result=result.model_dump(),
         )
 
+    fallback = (
+        "I couldn't fully understand the problem - could you give a few more numeric details?"
+        if lang == "en"
+        else "Problemi tam olarak anlayamadim - luften daha fazla sayisal detay verir misin?"
+    )
     return SolveResponse(
         problem_type="other",
-        clarification_needed=parsed.clarification_needed
-        or "Problemi tam olarak anlayamadim - luften daha fazla sayisal detay verir misin?",
+        clarification_needed=parsed.clarification_needed or fallback,
     )
