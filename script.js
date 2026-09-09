@@ -70,3 +70,97 @@ document.addEventListener("DOMContentLoaded", function() {
     // İlk Yüklemede Boş İçerik Göster
     teknikIcerigiYukle("");
 });
+
+// --- Problem Çözücü (gerçek PuLP/kuyruk-teorisi backend'i, ayrı, global scope -
+// index.html'deki onclick="cozProblemi()" buna erişebilsin diye yukarıdaki
+// DOMContentLoaded kapanışının dışında tanımlandı) ---
+const COZUCU_API = "";
+
+async function cozucuConfigYukle() {
+    try {
+        const cfg = await (await fetch(`${COZUCU_API}/config`)).json();
+        document.getElementById("modelBadge").textContent = `Aktif model: ${cfg.provider} / ${cfg.model}`;
+    } catch {
+        document.getElementById("modelBadge").textContent = "";
+    }
+}
+
+function fmtSayi(v) {
+    if (v === null || v === undefined) return "-";
+    if (!isFinite(v)) return "∞";
+    return Number(v).toFixed(4).replace(/\.?0+$/, "") || "0";
+}
+
+function renderLpSonuc(sol) {
+    const degiskenler = Object.entries(sol.variable_values)
+        .map(([k, v]) => `<span class="lp-degisken"><strong>${k}</strong> = ${fmtSayi(v)}</span>`)
+        .join("");
+    return `
+        <div class="sonuc-kutusu">
+            <div class="sonuc-baslik">Gerçek Solver Sonucu (PuLP/CBC)</div>
+            <div class="sonuc-satir">Durum: <strong>${sol.status}</strong></div>
+            <div class="sonuc-satir">Optimal değer: <strong>${fmtSayi(sol.objective_value)}</strong></div>
+            <div class="lp-degiskenler">${degiskenler}</div>
+        </div>`;
+}
+
+function renderQueueSonuc(r) {
+    if (!r.stable) {
+        return `<div class="sonuc-kutusu sonuc-uyari">
+            <div class="sonuc-baslik">Gerçek Hesap (${r.model.toUpperCase()})</div>
+            <div class="sonuc-satir">Utilizasyon (ρ) = ${fmtSayi(r.rho)} ≥ 1 - sistem <strong>KARARSIZ</strong>.</div>
+        </div>`;
+    }
+    return `
+        <div class="sonuc-kutusu">
+            <div class="sonuc-baslik">Gerçek Hesap (${r.model.toUpperCase()})</div>
+            <div class="sonuc-satir">ρ (utilizasyon) = <strong>${fmtSayi(r.rho)}</strong></div>
+            <div class="sonuc-satir">L (sistemde ort. müşteri) = <strong>${fmtSayi(r.L)}</strong></div>
+            <div class="sonuc-satir">Lq (kuyrukta ort. müşteri) = <strong>${fmtSayi(r.Lq)}</strong></div>
+            <div class="sonuc-satir">W (sistemde ort. süre) = <strong>${fmtSayi(r.W)}</strong></div>
+            <div class="sonuc-satir">Wq (kuyrukta ort. bekleme) = <strong>${fmtSayi(r.Wq)}</strong></div>
+        </div>`;
+}
+
+async function cozProblemi() {
+    const soru = document.getElementById("cozucuSoru").value.trim();
+    if (!soru) return;
+    const durumEl = document.getElementById("cozucuDurum");
+    const btn = document.getElementById("cozucuBtn");
+    const sonucEl = document.getElementById("cozucuSonuc");
+    btn.disabled = true;
+    durumEl.textContent = "Problem ayrıştırılıyor ve gerçek çözücüyle hesaplanıyor - 10-40 sn sürebilir...";
+    sonucEl.innerHTML = "";
+
+    try {
+        const res = await fetch(`${COZUCU_API}/solve`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question: soru }),
+        });
+        if (!res.ok) {
+            let msg = await res.text();
+            try { msg = JSON.parse(msg).detail || msg; } catch {}
+            durumEl.textContent = "Hata: " + msg;
+            return;
+        }
+        const data = await res.json();
+        durumEl.textContent = "";
+
+        if (data.problem_type === "lp" && data.lp_solution) {
+            sonucEl.innerHTML = renderLpSonuc(data.lp_solution) +
+                `<div class="sonuc-aciklama">${data.explanation.replace(/\n/g, "<br>")}</div>`;
+        } else if (data.problem_type === "queueing" && data.queueing_result) {
+            sonucEl.innerHTML = renderQueueSonuc(data.queueing_result) +
+                `<div class="sonuc-aciklama">${data.explanation.replace(/\n/g, "<br>")}</div>`;
+        } else {
+            sonucEl.innerHTML = `<div class="sonuc-kutusu sonuc-uyari"><div class="sonuc-satir">${data.clarification_needed}</div></div>`;
+        }
+    } catch (e) {
+        durumEl.textContent = "Hata: " + e.message;
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+document.addEventListener("DOMContentLoaded", cozucuConfigYukle);

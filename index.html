@@ -16,6 +16,7 @@
     <nav>
         <ul>
             <li><a href="#genel-bakis">Genel Bakış</a></li>
+            <li><a href="#cozucu">Problem Çözücü</a></li>
             <li><a href="#teknikler">Teknikler</a></li>
             <li><a href="#uygulama-alanlari">Uygulama Alanları</a></li>
             <li><a href="#araclar">Araçlar</a></li>
@@ -29,6 +30,23 @@
             <h2>Genel Bakış</h2>
             <p>Yöneylem araştırması (YA), karar verme süreçlerini iyileştirmek için matematiksel ve analitik yöntemlerin kullanıldığı bir disiplindir. İkinci Dünya Savaşı sırasında lojistik ve askeri planlama problemleri için geliştirilen yöntemler, günümüzde üretim planlama, ulaştırma, stok yönetimi, çizelgeleme ve kaynak tahsisi gibi pek çok alanda kullanılıyor.</p>
             <p>Bu sayfa, YA'nın dört temel tekniğine (doğrusal programlama, tamsayılı programlama, kuyruk teorisi, benzetim) kısa, matematiksel olarak doğru bir giriş sunar.</p>
+        </section>
+
+        <section id="cozucu">
+            <h2>Problem Çözücü</h2>
+            <p class="cozucu-aciklama">
+                Problemini kendi cümlelerinle anlat - doğrusal/tamsayılı programlama (kâr/maliyet
+                maksimize/minimize etme, kaynak kısıtları) veya kuyruk teorisi (varış/hizmet oranı,
+                bekleme süresi) sorularını gerçek bir çözücü (PuLP/CBC) ve gerçek formüllerle
+                çözer - cevap bir tahmin değil, gerçek hesaplanmış bir sonuçtur.
+            </p>
+            <div id="modelBadge" class="model-badge"></div>
+            <div class="cozucu-form">
+                <textarea id="cozucuSoru" rows="4" placeholder="Örn: Bir fabrika iki ürün üretiyor... / Bir gişeye saatte ortalama 2 müşteri geliyor, hizmet oranı 5..."></textarea>
+                <button id="cozucuBtn" onclick="cozProblemi()">Çöz</button>
+                <div id="cozucuDurum" class="cozucu-durum"></div>
+            </div>
+            <div id="cozucuSonuc"></div>
         </section>
 
         <section id="teknikler">

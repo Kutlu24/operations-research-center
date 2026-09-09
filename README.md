@@ -1,11 +1,12 @@
-# Optimizasyon Merkezi — Operations Research Reference
+# Optimizasyon Merkezi — Operations Research Reference + Solver
 
-A static, Turkish-language reference site for **Operations Research (Yöneylem Araştırması)**: four core techniques with real mathematical formulations rendered via MathJax, application areas, tooling, and further-reading links.
+A Turkish-language **Operations Research (Yöneylem Araştırması)** site: a static reference (four core techniques with real mathematical formulations rendered via MathJax, application areas, tooling, further-reading links) plus an interactive **Problem Çözücü** that actually solves the problem a user describes in plain language - not an LLM guess.
 
 🇩🇪 German version: [README.de.md](README.de.md)
 
 ## What it does
 
+- **Problem Çözücü (Solver):** describe an LP/IP or queueing problem in natural language; an LLM parses it into a structured formulation, then a *real* solver computes the answer - [PuLP](https://coin-or.github.io/pulp/) (bundled CBC) for linear/integer programming, closed-form M/M/1 and M/M/c formulas for queueing. The LLM only narrates the already-computed numbers afterward - it never invents the answer itself.
 - **Teknikler (Techniques):** switchable cards for Linear Programming, Integer Programming, Queueing Theory, and Simulation — each with its standard mathematical formulation (LaTeX via [MathJax](https://www.mathjax.org/)), solution methods, and a worked example.
 - **Uygulama Alanları (Applications):** production planning, logistics, inventory, staff scheduling, service systems.
 - **Araçlar (Tools):** real solvers and libraries (CPLEX, Gurobi, CBC, Python's PuLP/Pyomo/SimPy, R's lpSolve/ompr, Excel Solver).
@@ -13,14 +14,18 @@ A static, Turkish-language reference site for **Operations Research (Yöneylem A
 
 ## Tech stack
 
-Plain HTML, CSS and vanilla JavaScript. Math typesetting via [MathJax](https://www.mathjax.org/) (CDN).
+Frontend: plain HTML, CSS and vanilla JavaScript, math typesetting via [MathJax](https://www.mathjax.org/) (CDN). Backend (`src/yoneylem`): FastAPI + PuLP, serving the frontend directly at `/ui`. LLM parsing/explanation via GLM (default, free tier) or Gemini - see `src/yoneylem/config.py`.
 
 ## Running it
 
-Open `index.html` in a browser, or serve the folder with any static file server:
+Static-only (no solver): open `index.html` in a browser, or `npx serve .`.
 
+With the solver backend:
 ```bash
-npx serve .
+pip install -e .
+# .env needs GLM_API_KEY (and/or GEMINI_API_KEY)
+uvicorn yoneylem.api.app:app --reload
+# open http://127.0.0.1:8000/ui/
 ```
 
 ## Notes

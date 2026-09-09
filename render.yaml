@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: yoneylem-optimizasyon-merkezi
+    runtime: python
+    plan: free
+    buildCommand: pip install -e .
+    startCommand: uvicorn yoneylem.api.app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: CHAT_PROVIDER
+        value: glm
+      - key: GLM_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.12.6
